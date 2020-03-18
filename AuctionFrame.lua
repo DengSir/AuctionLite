@@ -79,23 +79,17 @@ end
 -- "Buy" frame.  We use a raw hook so that the stack-splitting frame
 -- doesn't show up.
 function AuctionLite:ChatEdit_InsertLink_Hook(link)
-    local handled = false
-
-    -- Is this click ours?
-    if AuctionFrame:IsShown() and CurrentTab == BuyTabIndex and link:find('item:', 1, true) then
-        local name = GetItemInfo(link)
-        if name ~= nil then
-            self:NameClickBuy(name)
-            handled = true
+    if not self.hooks['ChatEdit_InsertLink'](link) then
+        -- Is this click ours?
+        if AuctionFrame:IsShown() and CurrentTab == BuyTabIndex and link:find('item:', 1, true) then
+            local name = GetItemInfo(link)
+            if name ~= nil then
+                self:NameClickBuy(name)
+                return true
+            end
         end
     end
-
-    -- It wasn't, so let the existing handler take it.
-    if not handled then
-        handled = self.hooks['ChatEdit_InsertLink'](link)
-    end
-
-    return handled
+    return false
 end
 
 -- Jump to the selected tab on opening the AH.

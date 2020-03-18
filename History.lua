@@ -105,6 +105,7 @@ function AuctionLite:UpdateHistoricalPrice(link, data)
             info.price = (data.price * data.listings * presentDiscountFactor + info.price * info.listings *
                              pastDiscountFactor) /
                              (data.listings * presentDiscountFactor + info.listings * pastDiscountFactor)
+            info.minPrice = data.price
             info.listings = data.listings * presentDiscountFactor + info.listings * pastDiscountFactor
             info.items = data.items * presentDiscountFactor + info.items * pastDiscountFactor
             info.scans = 1 * presentDiscountFactor + info.scans * pastDiscountFactor

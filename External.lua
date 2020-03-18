@@ -34,7 +34,7 @@ function AuctionLite:GetAuctionValue(arg1, arg2)
     if id ~= nil then
         local hist = self:GetHistoricalPriceById(id, suffix)
         if hist ~= nil then
-            result = math.floor(hist.price)
+            result = math.floor(hist.minPrice or hist.price)
         end
     end
 

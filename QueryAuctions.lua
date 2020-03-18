@@ -72,10 +72,17 @@ function AuctionLite:QueryUpdate()
     if canSend and Query ~= nil and Query.state == QUERY_STATE_SEND then
         -- Determine the query string.
         local name = nil
+        local exact = Query.exact
         if Query.name ~= nil then
             name = Query.name
         elseif Query.link ~= nil then
             name = self:SplitLink(Query.link)
+
+            local baseName = GetItemInfo(Query.link:match('item:(%d+)'))
+            if name ~= baseName then
+                name = baseName
+                exact = false
+            end
         end
 
         -- Did we get a reasonable query?  We need a name, and if it's a getAll
@@ -99,7 +106,7 @@ function AuctionLite:QueryUpdate()
 
             -- Submit the query.
             OurQuery = true
-            QueryAuctionItems(name, 0, 0, Query.page, false, -1, getAll, Query.exact)
+            QueryAuctionItems(name, 0, 0, Query.page, false, -1, getAll, exact)
             OurQuery = false
 
             -- Wait for our result.
